@@ -1,0 +1,5 @@
+C:\Users\Anna\Desktop\MyKursach\BrickBreaker\Contract\bin\Debug\Contract.dll
+C:\Users\Anna\Desktop\MyKursach\BrickBreaker\Contract\bin\Debug\Contract.pdb
+C:\Users\Anna\Desktop\MyKursach\BrickBreaker\Contract\obj\Debug\Contract.csprojResolveAssemblyReference.cache
+C:\Users\Anna\Desktop\MyKursach\BrickBreaker\Contract\obj\Debug\Contract.dll
+C:\Users\Anna\Desktop\MyKursach\BrickBreaker\Contract\obj\Debug\Contract.pdb

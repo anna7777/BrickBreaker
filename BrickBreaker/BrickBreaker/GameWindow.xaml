@@ -1,0 +1,73 @@
+﻿<Window x:Class="BrickBreaker.GameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:BrickBreaker"
+        mc:Ignorable="d"
+        Title="GameWindow" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
+    <Window.DataContext>
+        <local:GameWindowViewModel/>
+    </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Key="Left" Command="{Binding MoveLeftCommand}" />
+        <KeyBinding Key="Right" Command="{Binding MoveRightCommand}" />
+        <KeyBinding Key="Esc" Command="{Binding EscCommand}" />
+    </Window.InputBindings>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding ClosingCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <Style x:Key="PlayerStyle">
+            <Setter Property="Button.MinWidth" Value="50"/>
+            <Setter Property="Button.MinHeight" Value="15"/>
+        </Style>
+    </Window.Resources>
+    <Canvas Height="518"
+            Width="350"
+            Margin="1"
+            Name="field" 
+            Background="Navy">
+        <Button Canvas.Top="{Binding Top2, UpdateSourceTrigger=PropertyChanged}"
+                Canvas.Right="{Binding Right2, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource PlayerStyle}"
+                Background="{Binding Background2, UpdateSourceTrigger=PropertyChanged}"
+                Name="btnPlayer2"/>
+        <Button Canvas.Bottom="{Binding Bottom1, UpdateSourceTrigger=PropertyChanged}"
+                Canvas.Left="{Binding Left1, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource PlayerStyle}"
+                Background="{Binding Background1, UpdateSourceTrigger=PropertyChanged}"
+                Name="btnPlayer1"/>
+        <Button MinWidth="12"
+                MinHeight="12"
+                Canvas.Bottom="{Binding BallBottom, UpdateSourceTrigger=PropertyChanged}"
+                Canvas.Left="{Binding BallLeft, UpdateSourceTrigger=PropertyChanged}"
+                Name="btnBall">
+            <Button.Template>
+                <ControlTemplate  TargetType="Button">
+                    <Grid>
+                        <Ellipse Fill="Red"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Width="15"
+                Height="15"
+                Canvas.Top="10"
+                Canvas.Left="3"
+                Background="Aqua"
+                Content="{Binding Player1Points,UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Width="15"
+                Height="15"
+                Canvas.Top="30"
+                Canvas.Left="3"
+                Background="MistyRose"
+                Content="{Binding Player2Points,UpdateSourceTrigger=PropertyChanged}"/>
+    </Canvas>
+</Window>

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrickBreaker", "BrickBreaker\BrickBreaker.csproj", "{57DBABDD-67AC-4638-B527-8F81B5D886CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{36E5F18E-46FA-48B9-A45B-8C826D11F07C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract", "Contract\Contract.csproj", "{6441BA20-A27A-421D-81F2-683E86E5A62B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{57DBABDD-67AC-4638-B527-8F81B5D886CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57DBABDD-67AC-4638-B527-8F81B5D886CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57DBABDD-67AC-4638-B527-8F81B5D886CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57DBABDD-67AC-4638-B527-8F81B5D886CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36E5F18E-46FA-48B9-A45B-8C826D11F07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36E5F18E-46FA-48B9-A45B-8C826D11F07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36E5F18E-46FA-48B9-A45B-8C826D11F07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36E5F18E-46FA-48B9-A45B-8C826D11F07C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6441BA20-A27A-421D-81F2-683E86E5A62B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6441BA20-A27A-421D-81F2-683E86E5A62B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6441BA20-A27A-421D-81F2-683E86E5A62B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6441BA20-A27A-421D-81F2-683E86E5A62B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
