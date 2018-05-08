@@ -42,7 +42,7 @@ namespace BrickBreaker {
     public partial class GameWindow : System.Windows.Window, System.Windows.Markup.IComponentConnector {
         
         
-        #line 35 "..\..\GameWindow.xaml"
+        #line 37 "..\..\GameWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Canvas field;
         
@@ -50,7 +50,7 @@ namespace BrickBreaker {
         #line hidden
         
         
-        #line 41 "..\..\GameWindow.xaml"
+        #line 43 "..\..\GameWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button btnPlayer2;
         
@@ -58,7 +58,7 @@ namespace BrickBreaker {
         #line hidden
         
         
-        #line 46 "..\..\GameWindow.xaml"
+        #line 48 "..\..\GameWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button btnPlayer1;
         
@@ -66,7 +66,7 @@ namespace BrickBreaker {
         #line hidden
         
         
-        #line 51 "..\..\GameWindow.xaml"
+        #line 53 "..\..\GameWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button btnBall;
         

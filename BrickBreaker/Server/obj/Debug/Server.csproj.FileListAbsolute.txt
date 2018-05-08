@@ -6,3 +6,6 @@ C:\Users\Anna\Desktop\MyKursach\BrickBreaker\Server\bin\Debug\Contract.pdb
 C:\Users\Anna\Desktop\MyKursach\BrickBreaker\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 C:\Users\Anna\Desktop\MyKursach\BrickBreaker\Server\obj\Debug\Server.exe
 C:\Users\Anna\Desktop\MyKursach\BrickBreaker\Server\obj\Debug\Server.pdb
+C:\Users\Anna\Desktop\CoolGame\BrickBreaker\Server\bin\Debug\Server.exe.config
+C:\Users\Anna\Desktop\CoolGame\BrickBreaker\Server\obj\Debug\Server.exe
+C:\Users\Anna\Desktop\CoolGame\BrickBreaker\Server\obj\Debug\Server.pdb

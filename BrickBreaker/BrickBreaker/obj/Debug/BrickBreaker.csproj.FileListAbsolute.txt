@@ -28,3 +28,6 @@ C:\Users\Anna\Desktop\MyKursach\BrickBreaker\BrickBreaker\obj\Debug\MenuWindow.b
 C:\Users\Anna\Desktop\MyKursach\BrickBreaker\BrickBreaker\obj\Debug\BrickBreaker.g.resources
 C:\Users\Anna\Desktop\MyKursach\BrickBreaker\BrickBreaker\obj\Debug\BrickBreaker.Properties.Resources.resources
 C:\Users\Anna\Desktop\MyKursach\BrickBreaker\BrickBreaker\obj\Debug\BrickBreaker.csproj.GenerateResource.Cache
+C:\Users\Anna\Desktop\CoolGame\BrickBreaker\BrickBreaker\bin\Debug\BrickBreaker.exe.config
+C:\Users\Anna\Desktop\CoolGame\BrickBreaker\BrickBreaker\obj\Debug\BrickBreaker.exe
+C:\Users\Anna\Desktop\CoolGame\BrickBreaker\BrickBreaker\obj\Debug\BrickBreaker.pdb
