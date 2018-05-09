@@ -15,6 +15,7 @@ namespace Contract
         void MoveRight();
         void BallCoordinatesProcesing();
         void LoadGame();
+        void LoadBricks();
         void CloseGame();
         void Exit();
         void SendMessage(string message);
@@ -29,6 +30,7 @@ namespace Contract
         Right,
         BallCoordinatesProcesing,
         LoadGame,
+        LoadBricks,
         CloseGame,
         Exit,
         SendMessage,

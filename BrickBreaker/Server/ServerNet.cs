@@ -19,12 +19,16 @@ namespace Server
         static Queue<string> chat = new Queue<string>();
         static object locker1 = new object();
         static object locker2 = new object();
+        static object locker_for_db = new object();
 
+        Random random = new Random();
         int player_width = 50;
         int canvas_leftmargin = 3;
         int coef_of_deviation = 7;
         int ball_width = 12;
         int indent = 25;
+
+        BrickBreakerEntities _db = new BrickBreakerEntities();
         #endregion
 
         public ServerNet()
@@ -71,6 +75,9 @@ namespace Server
                         Room room = rooms.FirstOrDefault(x => x.player1.tcp == tcp || x.player2.tcp == tcp);
                         SendBallCoordinates(room, command, br.ReadDouble());
                         break;
+                    case Commands.LoadBricks:
+                        SendBricks(tcp);
+                        break;
                     case Commands.BallCoordinatesProcesing:
                         BallCoordinatesProcesing(tcp);
                         break;
@@ -86,6 +93,48 @@ namespace Server
                     default:
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// randomly generates a card
+        /// and sends it to both players in the room 
+        /// </summary>
+        /// <param name="tcp"></param>
+        private void SendBricks(TcpClient tcp)
+        {
+            Room room = rooms.FirstOrDefault(x => x.player1.tcp == tcp || x.player2.tcp == tcp);
+            if (tcp == room.player2.tcp)
+                return;
+            List<Brick> bricks;
+            string map;
+            int map_id = random.Next(1, 7);
+            lock (locker_for_db)
+            {
+                map = _db.Maps.FirstOrDefault(x => x.id == map_id).title;
+                bricks = _db.Bricks.Where(x=>x.map_id == map_id).ToList();
+            }
+            BinaryWriter bw = new BinaryWriter(room.player1.tcp.GetStream());
+            SendBricksToPlayer(bw, bricks, map);
+            bw = new BinaryWriter(room.player2.tcp.GetStream());
+            SendBricksToPlayer(bw, bricks, map);
+        }
+
+        /// <summary>
+        /// send list of bricks and map title to player
+        /// </summary>
+        /// <param name="bw"></param>
+        /// <param name="list">list of bricks</param>
+        /// <param name="map">map title</param>
+        public void SendBricksToPlayer(BinaryWriter bw, List<Brick> list, string map)
+        {
+            bw.Write((byte)Commands.LoadBricks);
+            bw.Write(map);
+            bw.Write(list.Count);
+            foreach (var item in list)
+            {
+                bw.Write((int)item.y);
+                bw.Write((int)item.x);
             }
         }
 
@@ -247,14 +296,14 @@ namespace Server
                         room.goal.goal = true;
                         if (room.ball_top < window_height / 2 && (room.player1.left - ball_width < room.ball_left && room.player1.left + player_width > room.ball_left))
                         {
-                            room.k = (room.ball_left + ball_width/2 - room.player1.left - player_width / 2) / (player_width / 2) * coef_of_deviation;
+                            room.k = (room.ball_left + ball_width / 2 - room.player1.left - player_width / 2) / (player_width / 2) * coef_of_deviation;
                             room.goal.goal = false;
                             room.ChangeDirection();
                         }
-                        
+
                         else if (room.ball_top > window_height / 2 && (room.player2.left < (window_width - room.ball_left) && room.player2.left + player_width + ball_width > (window_width - room.ball_left)))
                         {
-                            room.k = (room.ball_left + ball_width/2 - (window_width - room.player2.left) + player_width / 2) / (player_width / 2) * coef_of_deviation;
+                            room.k = (room.ball_left + ball_width / 2 - (window_width - room.player2.left) + player_width / 2) / (player_width / 2) * coef_of_deviation;
                             room.goal.goal = false;
                             room.ChangeDirection();
                         }
@@ -322,12 +371,12 @@ namespace Server
             if (room.goal.player1 == true)
             {
                 room.ball_top = indent;
-                room.ball_left = room.player2.left + player_width / 2 - ball_width/2;
+                room.ball_left = room.player2.left + player_width / 2 - ball_width / 2;
             }
             else if (room.goal.player2 == true)
             {
                 room.ball_top = window_height - (indent + ball_width);
-                room.ball_left = room.player1.left + player_width / 2 - ball_width/2;
+                room.ball_left = room.player1.left + player_width / 2 - ball_width / 2;
             }
 
             room.ChangeDirection();

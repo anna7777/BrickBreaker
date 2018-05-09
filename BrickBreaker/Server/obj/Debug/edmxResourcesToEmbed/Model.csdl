@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BrickBreakerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Brick">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="map_id" Type="Int32" />
+    <Property Name="x" Type="Int32" />
+    <Property Name="y" Type="Int32" />
+    <NavigationProperty Name="Map" Relationship="Self.fk1" FromRole="Brick" ToRole="Map" />
+  </EntityType>
+  <EntityType Name="Map">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="title" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Bricks" Relationship="Self.fk1" FromRole="Map" ToRole="Brick" />
+  </EntityType>
+  <Association Name="fk1">
+    <End Role="Map" Type="Self.Map" Multiplicity="0..1" />
+    <End Role="Brick" Type="Self.Brick" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Map">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Brick">
+        <PropertyRef Name="map_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BrickBreakerEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Bricks" EntityType="Self.Brick" />
+    <EntitySet Name="Maps" EntityType="Self.Map" />
+    <AssociationSet Name="fk1" Association="Self.fk1">
+      <End Role="Map" EntitySet="Maps" />
+      <End Role="Brick" EntitySet="Bricks" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

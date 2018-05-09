@@ -17,6 +17,8 @@ namespace Server
         public int direction { get; set; }
         public double k { get; set; }
         public Goal goal { get; set; }
+        public List<Brick> bricks { get; set; }
+
         public Room()
         {
             player1 = new Player();

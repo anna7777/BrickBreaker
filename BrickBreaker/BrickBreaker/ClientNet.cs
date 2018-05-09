@@ -71,6 +71,12 @@ namespace BrickBreaker
             bw.Write(GameWindowViewModel.fieldWidth);
         }
 
+        public void LoadBricks()
+        {
+            var bw = new BinaryWriter(tcp.GetStream());
+            bw.Write((byte)Commands.LoadBricks);
+        }
+
         public void CloseGame()
         {
             brickbreaker.Dispatcher.Invoke(() =>
@@ -127,6 +133,9 @@ namespace BrickBreaker
                         case Commands.LoadGame:
                             SetBallCoordinates(command);
                             break;
+                        case Commands.LoadBricks:
+                            SetBricks();
+                            break;
                         case Commands.SelectARoom:
                             SelectRoom();
                             break;
@@ -176,6 +185,32 @@ namespace BrickBreaker
                 }
             }
             catch { }
+        }
+
+        private void SetBricks()
+        {
+            BinaryReader br = new BinaryReader(tcp.GetStream());
+            string map = br.ReadString();
+            brickbreakermodel.Map = map;
+            int count = br.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                int y = br.ReadInt32();
+                int x = br.ReadInt32();
+                brickbreaker.Dispatcher.Invoke(() =>
+                {
+                    Button temp = new Button() { Width = 30, Height = 15 };
+                    Canvas.SetLeft(temp, y * 45 + 25);
+                    Canvas.SetTop(temp, x * 45 + 80);
+
+                    Button temp2 = new Button() { Width = 30, Height = 15 };
+                    Canvas.SetLeft(temp2, y * 45 + 25);
+                    Canvas.SetBottom(temp2, x * 45 + 80);
+
+                    brickbreakermodel.items.Add(temp);
+                    brickbreakermodel.items.Add(temp2);
+                });
+            }
         }
 
         private void SetGoal()

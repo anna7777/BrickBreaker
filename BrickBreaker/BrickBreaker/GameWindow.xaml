@@ -23,51 +23,56 @@
             <i:InvokeCommandAction Command="{Binding ClosingCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Window.Resources>
+    <!--<Window.Resources>
         <Style x:Key="PlayerStyle">
             <Setter Property="Button.MinWidth" Value="50"/>
             <Setter Property="Button.MinHeight" Value="15"/>
         </Style>
-    </Window.Resources>
-    <Canvas Height="518"
-            Width="350"
-            Margin="1"
-            Name="field" 
-            Background="Navy">
-        <Button Canvas.Top="{Binding Top2, UpdateSourceTrigger=PropertyChanged}"
-                Canvas.Right="{Binding Right2, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource PlayerStyle}"
-                Background="{Binding Background2, UpdateSourceTrigger=PropertyChanged}"
-                Name="btnPlayer2"/>
-        <Button Canvas.Bottom="{Binding Bottom1, UpdateSourceTrigger=PropertyChanged}"
-                Canvas.Left="{Binding Left1, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource PlayerStyle}"
-                Background="{Binding Background1, UpdateSourceTrigger=PropertyChanged}"
-                Name="btnPlayer1"/>
-        <Button MinWidth="12"
-                MinHeight="12"
-                Canvas.Bottom="{Binding BallBottom, UpdateSourceTrigger=PropertyChanged}"
-                Canvas.Left="{Binding BallLeft, UpdateSourceTrigger=PropertyChanged}"
-                Name="btnBall">
-            <Button.Template>
-                <ControlTemplate  TargetType="Button">
-                    <Grid>
-                        <Ellipse Fill="Red"/>
-                    </Grid>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-        <Button Width="15"
-                Height="15"
+    </Window.Resources>-->
+    <StackPanel Orientation="Horizontal"
+                Background="SkyBlue">
+        <ItemsControl ItemsSource="{Binding items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Height="518"
+                            Width="350"
+                            Margin="1"
+                            Name="field" 
+                            Background="Navy"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <Button Width="{Binding Width}" Height="{Binding Height}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <StackPanel>
+            <Button Width="40"
+                Height="27"
                 Canvas.Top="10"
                 Canvas.Left="3"
                 Background="Aqua"
                 Content="{Binding Player1Points,UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Width="15"
-                Height="15"
+            <Button Width="40"
+                Height="27"
                 Canvas.Top="30"
                 Canvas.Left="3"
                 Background="MistyRose"
                 Content="{Binding Player2Points,UpdateSourceTrigger=PropertyChanged}"/>
-    </Canvas>
+            <TextBlock Text="{Binding Map, UpdateSourceTrigger=PropertyChanged}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0 20"
+                       FontSize="18"
+                       FontWeight="Medium">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-270"></RotateTransform>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </StackPanel>
+    </StackPanel>
 </Window>
