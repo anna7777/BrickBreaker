@@ -35,6 +35,7 @@ namespace Contract
         Exit,
         SendMessage,
         Paint,
-        Goal
+        Goal,
+        RemoveBrick
     }
 }

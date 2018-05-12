@@ -112,12 +112,16 @@ namespace Server
             lock (locker_for_db)
             {
                 map = _db.Maps.FirstOrDefault(x => x.id == map_id).title;
-                bricks = _db.Bricks.Where(x=>x.map_id == map_id).ToList();
+                bricks = _db.Bricks.Where(x => x.map_id == map_id).ToList();
             }
             BinaryWriter bw = new BinaryWriter(room.player1.tcp.GetStream());
             SendBricksToPlayer(bw, bricks, map);
             bw = new BinaryWriter(room.player2.tcp.GetStream());
             SendBricksToPlayer(bw, bricks, map);
+            room.bricks_p1 = new List<Brick>();
+            room.bricks_p2 = new List<Brick>();
+            room.bricks_p1.AddRange(bricks);
+            room.bricks_p2.AddRange(bricks);
         }
 
         /// <summary>
@@ -329,6 +333,34 @@ namespace Server
                             }
                         }
                     }
+                    else if (room.bricks_p1 != null)
+                    {
+                        List<Brick> bricks = new List<Brick>();
+                        bool side = false;
+                        if (room.ball_top < window_height / 2)
+                        {
+                            bricks = room.bricks_p1;
+                            side = true;
+                        }
+                        else
+                            bricks = room.bricks_p2;
+
+                        foreach (var item in bricks)
+                        {
+                            bool condition1 = (room.ball_top + ball_width < item.x * 45 + 80) || (room.ball_top > item.x * 45 + 80 + 15);
+                            bool condition2 = (room.ball_top > window_height - (item.x * 45 + 80)) || (room.ball_top + ball_width < window_height - (item.x* 45 + 80 + 15));
+                            if (condition1 && condition2)
+                                continue;
+                            if ((item.y * 45 + indent - ball_width < room.ball_left && item.y * 45 + indent + 30 > room.ball_left))
+                            {
+                                room.k = (room.ball_left + ball_width / 2 - (window_width - (int)item.y * 45 - indent) + 30 / 2) / (30 / 2) * coef_of_deviation;
+                                RemoveBrick(room, item, window_height, side);
+                                bricks.Remove(item);
+                                room.ChangeDirection();
+                                break;
+                            }
+                        }
+                    }
                     #endregion
 
                     if (room.goal.goal == false)
@@ -352,6 +384,20 @@ namespace Server
                     SendBallCoordinates(room, Commands.BallCoordinatesProcesing, window_width);
                 }
             }
+        }
+
+        public void RemoveBrick(Room room, Brick brick, double window_height, bool side)
+        {
+            BinaryWriter bw = new BinaryWriter(room.player1.tcp.GetStream());
+            bw.Write((byte)Commands.RemoveBrick);
+            bw.Write((int)brick.y);
+            bw.Write((int)brick.x);
+            bw.Write(side);
+            bw = new BinaryWriter(room.player2.tcp.GetStream());
+            bw.Write((byte)Commands.RemoveBrick);
+            bw.Write((int)brick.y);
+            bw.Write((int)brick.x);
+            bw.Write(!side);
         }
 
         private void SendGoal(Room room, byte g)

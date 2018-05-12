@@ -289,8 +289,8 @@ namespace BrickBreaker
 
         private void WindowLoadedCommandExecute(object obj)
         {
-            con.LoadGame();
             con.LoadBricks();
+            con.LoadGame();
             timer.Start();
         }
 

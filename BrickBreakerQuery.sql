@@ -3,7 +3,7 @@
   title varchar(250))
   
   insert into Map(title)
-  values ('Classic'), ('Chess'), ('Cuples'), ('Rails'), ('Keys'), ('Abstraction')
+  values ('C  l  a  s  s  i  c'), ('C  h  e  s  s'), ('C  u  p  l  e  s'), ('R  a  i  l  s'), ('K  e  y  s'), ('A  b  s  t  r  a  c  t  i  o  n')
   
   create table Brick
   (id int identity,

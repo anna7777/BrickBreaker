@@ -171,6 +171,9 @@ namespace BrickBreaker
                         case Commands.Goal:
                             SetGoal();
                             break;
+                        case Commands.RemoveBrick:
+                            RemoveBrick();
+                            break;
                         case Commands.Disconnect:
                             brickbreaker.Dispatcher.Invoke(() =>
                               {
@@ -185,6 +188,23 @@ namespace BrickBreaker
                 }
             }
             catch { }
+        }
+
+        private void RemoveBrick()
+        {
+            BinaryReader br = new BinaryReader(tcp.GetStream());
+            int y = br.ReadInt32();
+            int x = br.ReadInt32();
+            bool side = br.ReadBoolean();
+            brickbreaker.Dispatcher.Invoke(() =>
+            {
+                Button btn = new Button();
+                if (side)
+                    btn = brickbreakermodel.items.FirstOrDefault(b => Canvas.GetLeft(b) == y * 45 + 25 && Canvas.GetBottom(b) == x * 45 + 80);
+                else
+                    btn = brickbreakermodel.items.FirstOrDefault(b => Canvas.GetLeft(b) == y * 45 + 25 && Canvas.GetTop(b) == x * 45 + 80);
+                brickbreakermodel.items.Remove(btn);
+            });
         }
 
         private void SetBricks()

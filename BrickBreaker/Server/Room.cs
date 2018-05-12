@@ -17,7 +17,8 @@ namespace Server
         public int direction { get; set; }
         public double k { get; set; }
         public Goal goal { get; set; }
-        public List<Brick> bricks { get; set; }
+        public List<Brick> bricks_p1 { get; set; }
+        public List<Brick> bricks_p2 { get; set; }
 
         public Room()
         {
