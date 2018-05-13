@@ -1,4 +1,5 @@
-﻿using Contract;
+﻿using BrickBreaker.Experts;
+using Contract;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -17,12 +19,6 @@ namespace BrickBreaker.ViewModels
 {
     public class GameWindowViewModel : ViewModelBase
     {
-        public static double fieldWidth = 350;
-        public static double fieldHeight = 518;
-        public static double playerWidth = 50;
-        public static double playerHeight = 15;
-        public static double ball = 12;
-
         public IContract con;
         public DispatcherTimer timer;
         public bool closeSecondGame;
@@ -35,7 +31,7 @@ namespace BrickBreaker.ViewModels
         public ICommand WindowLoadedCommand { get; set; }
         public ICommand ClosingCommand { get; set; }
 
-        public ObservableCollection<Button> items { get; set; }
+        public ObservableCollection<UIElement> items { get; set; }
 
         private Brush background1;
         public Brush Background1
@@ -56,6 +52,28 @@ namespace BrickBreaker.ViewModels
             {
                 background2 = value;
                 OnPropertyChanged(nameof(Background2));
+            }
+        }
+
+        private BitmapImage source1;
+        public BitmapImage Source1
+        {
+            get { return source1; }
+            set
+            {
+                source1 = value;
+                OnPropertyChanged(nameof(Source1));
+            }
+        }
+
+        private BitmapImage source2;
+        public BitmapImage Source2
+        {
+            get { return source2; }
+            set
+            {
+                source2 = value;
+                OnPropertyChanged(nameof(Source2));
             }
         }
 
@@ -171,7 +189,7 @@ namespace BrickBreaker.ViewModels
             timer.Interval = new TimeSpan(0, 0, 0, 0, 50);
             timer.Tick += Timer_Tick;
 
-            items = new ObservableCollection<Button>();
+            items = new ObservableCollection<UIElement>();
 
             Top2 = 10;
             Bottom1 = 10;
@@ -184,16 +202,9 @@ namespace BrickBreaker.ViewModels
 
         public void CreateTwoPlayers()
         {
-            Button player1 = new Button();
-            player1.MinHeight = 15;
-            player1.MinWidth = 50;
-
-            #region -- binding background --
-            Binding bind_background1 = new Binding();
-            BindingSettings(bind_background1);
-            bind_background1.Path = new PropertyPath("Background1");
-            player1.SetBinding(Button.BackgroundProperty, bind_background1);
-            #endregion
+            Image player1 = new Image();
+            player1.Height = 15;
+            player1.Width = 50;
 
             #region -- binding bottom --
             Binding bind_bottom1 = new Binding();
@@ -209,16 +220,16 @@ namespace BrickBreaker.ViewModels
             player1.SetBinding(Canvas.LeftProperty, bind_left1);
             #endregion
 
-            Button player2 = new Button();
-            player2.MinHeight = 15;
-            player2.MinWidth = 50;
-
-            #region -- binding background --
-            Binding bind_background2 = new Binding();
-            BindingSettings(bind_background2);
-            bind_background2.Path = new PropertyPath("Background2");
-            player2.SetBinding(Button.BackgroundProperty, bind_background2);
+            #region -- binding source --
+            Binding source1 = new Binding();
+            BindingSettings(source1);
+            source1.Path = new PropertyPath("Source1"); ;
+            player1.SetBinding(Image.SourceProperty, source1);
             #endregion
+
+            Image player2 = new Image();
+            player2.Height = 15;
+            player2.Width = 50;
 
             #region -- binding top --
             Binding bind_top2 = new Binding();
@@ -232,6 +243,13 @@ namespace BrickBreaker.ViewModels
             BindingSettings(bind_right2);
             bind_right2.Path = new PropertyPath("Right2"); ;
             player2.SetBinding(Canvas.RightProperty, bind_right2);
+            #endregion
+
+            #region -- binding source --
+            Binding source2 = new Binding();
+            BindingSettings(source2);
+            source2.Path = new PropertyPath("Source2"); ;
+            player2.SetBinding(Image.SourceProperty, source2);
             #endregion
 
             items.Add(player1);

@@ -69,6 +69,7 @@ namespace BrickBreaker.ViewModels
             if (Nickname == null || Nickname.Trim() == "")
                 Nickname = "Anonim";
             con.SendMessage(Nickname, Message);
+            Message = "";
         }
 
         public void Scroll(Message message)

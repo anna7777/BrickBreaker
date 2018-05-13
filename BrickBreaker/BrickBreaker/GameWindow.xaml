@@ -30,7 +30,7 @@
         </Style>
     </Window.Resources>-->
     <StackPanel Orientation="Horizontal"
-                Background="SkyBlue">
+                Background="Black">
         <ItemsControl ItemsSource="{Binding items}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -55,19 +55,20 @@
                 Height="27"
                 Canvas.Top="10"
                 Canvas.Left="3"
-                Background="Aqua"
+                Background="{Binding Background1, UpdateSourceTrigger=PropertyChanged}"
                 Content="{Binding Player1Points,UpdateSourceTrigger=PropertyChanged}"/>
             <Button Width="40"
                 Height="27"
                 Canvas.Top="30"
                 Canvas.Left="3"
-                Background="MistyRose"
+                Background="{Binding Background2, UpdateSourceTrigger=PropertyChanged}"
                 Content="{Binding Player2Points,UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="{Binding Map, UpdateSourceTrigger=PropertyChanged}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0 20"
                        FontSize="18"
+                       Foreground="Aqua"
                        FontWeight="Medium">
                 <TextBlock.LayoutTransform>
                     <RotateTransform Angle="-270"></RotateTransform>

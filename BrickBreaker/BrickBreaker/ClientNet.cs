@@ -13,6 +13,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using BrickBreaker.ViewModels;
+using BrickBreaker.Experts;
 
 namespace BrickBreaker
 {
@@ -62,14 +63,14 @@ namespace BrickBreaker
         {
             var bw = new BinaryWriter(tcp.GetStream());
             bw.Write((byte)Commands.Right);
-            bw.Write(GameWindowViewModel.fieldWidth);
+            bw.Write(DesignExpert.fieldWidth);
         }
 
         public void LoadGame()
         {
             var bw = new BinaryWriter(tcp.GetStream());
             bw.Write((byte)Commands.LoadGame);
-            bw.Write(GameWindowViewModel.fieldWidth);
+            bw.Write(DesignExpert.fieldWidth);
         }
 
         public void LoadBricks()
@@ -92,10 +93,10 @@ namespace BrickBreaker
         {
             var bw = new BinaryWriter(tcp.GetStream());
             bw.Write((byte)Commands.BallCoordinatesProcesing);
-            bw.Write(GameWindowViewModel.fieldWidth);
-            bw.Write(GameWindowViewModel.fieldHeight);
-            bw.Write(GameWindowViewModel.playerWidth);
-            bw.Write(GameWindowViewModel.playerHeight);
+            bw.Write(DesignExpert.fieldWidth);
+            bw.Write(DesignExpert.fieldHeight);
+            bw.Write(DesignExpert.playerWidth);
+            bw.Write(DesignExpert.playerHeight);
         }
 
         public void Exit()
@@ -120,6 +121,17 @@ namespace BrickBreaker
             bw.Write((byte)Commands.SendMessage);
             bw.Write(nickname);
             bw.Write(message);
+        }
+
+        /// <summary>
+        /// send your color to another player in room
+        /// </summary>
+        /// <param name="color_id"></param>
+        public void PaintPlayer(int color_id)
+        {
+            var bw = new BinaryWriter(tcp.GetStream());
+            bw.Write((byte)Commands.PaintPlayer);
+            bw.Write(color_id);
         }
 
         private void ClientListener()
@@ -173,6 +185,9 @@ namespace BrickBreaker
                         case Commands.RemoveBrick:
                             RemoveBrick();
                             break;
+                        case Commands.PaintPlayer:
+                            SetPlayerColor();
+                            break;
                         case Commands.Disconnect:
                             brickbreaker.Dispatcher.Invoke(() =>
                               {
@@ -187,6 +202,27 @@ namespace BrickBreaker
                 }
             }
             catch { }
+        }
+
+        /// <summary>
+        /// set the color of the other player
+        /// </summary>
+        private void SetPlayerColor()
+        {
+            BinaryReader br = new BinaryReader(tcp.GetStream());
+            int player_id = br.ReadInt32();
+            int color_id = br.ReadInt32();
+            brickbreaker.Dispatcher.Invoke(() =>
+            {
+                if (player_id == 1)
+                {
+                    brickbreakermodel.Source2 = DesignExpert.GetPlayerBackgroundByNumber(color_id);
+                    brickbreakermodel.Background1 = DesignExpert.colors[color_id - 1];
+                    return;
+                }
+                brickbreakermodel.Source2 = DesignExpert.GetPlayerBackgroundByNumber(color_id);
+                brickbreakermodel.Background2 = DesignExpert.colors[color_id - 1];
+            });
         }
 
         private void ReceiveMessage()
@@ -214,9 +250,9 @@ namespace BrickBreaker
             {
                 Button btn = new Button();
                 if (side)
-                    btn = brickbreakermodel.items.FirstOrDefault(b => Canvas.GetLeft(b) == y * 45 + 25 && Canvas.GetBottom(b) == x * 45 + 80);
+                    btn = (Button)brickbreakermodel.items.FirstOrDefault(b => Canvas.GetLeft(b) == y * 45 + 25 && Canvas.GetBottom(b) == x * 45 + 80);
                 else
-                    btn = brickbreakermodel.items.FirstOrDefault(b => Canvas.GetLeft(b) == y * 45 + 25 && Canvas.GetTop(b) == x * 45 + 80);
+                    btn = (Button)brickbreakermodel.items.FirstOrDefault(b => Canvas.GetLeft(b) == y * 45 + 25 && Canvas.GetTop(b) == x * 45 + 80);
                 brickbreakermodel.items.Remove(btn);
             });
         }
@@ -234,15 +270,16 @@ namespace BrickBreaker
                 brickbreaker.Dispatcher.Invoke(() =>
                 {
                     Button temp = new Button() { Width = 30, Height = 15 };
+                    temp.Background = DesignExpert.GetBrick();
                     Canvas.SetLeft(temp, y * 45 + 25);
                     Canvas.SetTop(temp, x * 45 + 80);
-
-                    Button temp2 = new Button() { Width = 30, Height = 15 };
-                    Canvas.SetLeft(temp2, y * 45 + 25);
-                    Canvas.SetBottom(temp2, x * 45 + 80);
-
                     brickbreakermodel.items.Add(temp);
-                    brickbreakermodel.items.Add(temp2);
+
+                    temp = new Button() { Width = 30, Height = 15 };
+                    temp.Background = DesignExpert.GetBrick();
+                    Canvas.SetLeft(temp, y * 45 + 25);
+                    Canvas.SetBottom(temp, x * 45 + 80);
+                    brickbreakermodel.items.Add(temp);
                 });
             }
         }
@@ -304,8 +341,10 @@ namespace BrickBreaker
                     brickbreakermodel.BallLeft = br.ReadDouble();
                     if (com == Commands.LoadGame)
                     {
-                        brickbreakermodel.Background1 = Brushes.Aqua;
-                        brickbreakermodel.Background2 = Brushes.MistyRose;
+                        int number = 1;
+                        brickbreakermodel.Source1 = DesignExpert.GetPlayerBackground(ref number);
+                        brickbreakermodel.Background1 = DesignExpert.colors[number - 1];
+                        PaintPlayer(number);   
                     }
                 });
             }
@@ -313,12 +352,14 @@ namespace BrickBreaker
             {
                 brickbreaker.Dispatcher.Invoke(() =>
                 {
-                    brickbreakermodel.BallBottom = GameWindowViewModel.fieldHeight - br.ReadDouble() - GameWindowViewModel.ball;
-                    brickbreakermodel.BallLeft = GameWindowViewModel.fieldWidth - br.ReadDouble() - GameWindowViewModel.ball;
+                    brickbreakermodel.BallBottom = DesignExpert.fieldHeight - br.ReadDouble() - DesignExpert.ball;
+                    brickbreakermodel.BallLeft = DesignExpert.fieldWidth - br.ReadDouble() - DesignExpert.ball;
                     if (com == Commands.LoadGame)
                     {
-                        brickbreakermodel.Background2 = Brushes.Aqua;
-                        brickbreakermodel.Background1 = Brushes.MistyRose;
+                        int number = 3;
+                        brickbreakermodel.Source1 = DesignExpert.GetPlayerBackground(ref number);
+                        brickbreakermodel.Background2 = DesignExpert.colors[number - 1];
+                        PaintPlayer(number);
                     }
                 });
             }

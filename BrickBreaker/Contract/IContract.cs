@@ -19,6 +19,7 @@ namespace Contract
         void CloseGame();
         void Exit();
         void SendMessage(string nickname, string message);
+        void PaintPlayer(int color_id);
     }
 
     public enum Commands
@@ -36,6 +37,7 @@ namespace Contract
         SendMessage,
         Paint,
         Goal,
-        RemoveBrick
+        RemoveBrick,
+        PaintPlayer
     }
 }

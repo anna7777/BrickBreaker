@@ -8,10 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pictures/esc.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pictures/players/player1.jpg")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pictures/players/player2.jpg")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pictures/players/player3.jpg")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pictures/players/player4.jpg")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pictures/brick.jpg")]
 
 

@@ -86,6 +86,9 @@ namespace Server
                     case Commands.SendMessage:
                         SendMessage(tcp);
                         break;
+                    case Commands.PaintPlayer:
+                        PaintPlayer(tcp);
+                        break;
                     case Commands.Exit:
                         Exit(tcp);
                         break;
@@ -93,6 +96,30 @@ namespace Server
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// send your color to another player in room
+        /// </summary>
+        /// <param name="tcp"></param>
+        private void PaintPlayer(TcpClient tcp)
+        {
+            BinaryReader br = new BinaryReader(tcp.GetStream());
+            int color_id = br.ReadInt32();
+            Room room = rooms.FirstOrDefault(x => x.player1.tcp == tcp || x.player2.tcp == tcp);
+            BinaryWriter bw;
+            if (tcp == room.player1.tcp)
+            {
+                bw = new BinaryWriter(room.player2.tcp.GetStream());
+                bw.Write((byte)Commands.PaintPlayer);
+                bw.Write(1); // player1
+                bw.Write(color_id);
+                return;
+            }
+            bw = new BinaryWriter(room.player1.tcp.GetStream());
+            bw.Write((byte)Commands.PaintPlayer);
+            bw.Write(2); // player2
+            bw.Write(color_id);
         }
 
         /// <summary>
