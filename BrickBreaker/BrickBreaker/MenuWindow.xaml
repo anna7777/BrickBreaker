@@ -56,7 +56,7 @@
             <TextBox Width="409" MinHeight="22"
                      Margin="10 3 5 10"
                      FontSize="14"
-                     MaxLength="90"
+                     MaxLength="85"
                      Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
