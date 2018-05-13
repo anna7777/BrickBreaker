@@ -16,7 +16,6 @@ namespace Server
         #region variables
         static List<Room> rooms = new List<Room>();
         static List<TcpClient> clients = new List<TcpClient>();
-        static Queue<string> chat = new Queue<string>();
         static object locker1 = new object();
         static object locker2 = new object();
         static object locker_for_db = new object();
@@ -208,15 +207,14 @@ namespace Server
         private void SendMessage(TcpClient tcp)
         {
             BinaryReader br = new BinaryReader(tcp.GetStream());
+            string nickname = br.ReadString();
             string message = br.ReadString();
-            chat.Enqueue(message);
-            if (chat.Count > 30)
-                chat.Dequeue();
             BinaryWriter bw;
             foreach (var client in clients)
             {
                 bw = new BinaryWriter(client.GetStream());
                 bw.Write((byte)Commands.SendMessage);
+                bw.Write("[" + nickname + "]: ");
                 bw.Write(message);
             }
         }

@@ -3,17 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BrickBreaker"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:BrickBreaker.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="525" Width="525">
     <Window.DataContext>
         <local:MenuWindowViewModel/>
     </Window.DataContext>
-    <Grid Name="gRooms" Background="SkyBlue" MinWidth="425">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}"
+                                                       CommandParameter="{Binding ElementName=lbChat}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <StackPanel Background="SkyBlue"
+                Orientation="Vertical">
+        <Grid Name="gRooms" MinWidth="425">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30*"/>
-                <ColumnDefinition Width="100*"/>
-                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="10*"/>
@@ -22,42 +33,38 @@
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0"
-                   Grid.Row="0"
-                   Text="1)"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="30"/>
-            <TextBlock Grid.Column="0"
-                   Grid.Row="1"
-                   Text="2)"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="30"/>
-            <TextBlock Grid.Column="0"
-                   Grid.Row="2"
-                   Text="3)"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="30"/>
-            <TextBlock Grid.Column="0"
-                   Grid.Row="3"
-                   Text="4)"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="30"/>
-            <TextBlock Grid.Column="0"
-                   Grid.Row="4"
-                   Text="5)"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="30"/>
-            <TextBlock Grid.Column="0"
-                   Grid.Row="5"
-                   Text="6)"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="30"/>
         </Grid>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Choose your nickname: "
+                   Margin ="20 10 5 0"
+                   FontSize="14"/>
+            <TextBox Width="322"
+                     Height="22"
+                     Margin ="5 10 10 0"
+                     FontSize="14"
+                     Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <ListBox MinWidth="500" Height="170"
+                 Margin="12 5 12 3"
+                 Name="lbChat"
+                 ItemsSource="{Binding ChatContent}"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBox Width="409" MinHeight="22"
+                     Margin="10 3 5 10"
+                     FontSize="14"
+                     Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button MinWidth="70" MinHeight="22"
+                    Content="Send"
+                    FontSize="14"
+                    Margin="4.6,0,10.2,9.4"
+                    Height="20" VerticalAlignment="Bottom"
+                    Command="{Binding SendMessageCommand}"/>
+        </StackPanel>
+    </StackPanel>
 </Window>

@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
+using BrickBreaker.ViewModels;
 
 namespace BrickBreaker
 {
@@ -21,9 +22,9 @@ namespace BrickBreaker
         GameWindow brickbreaker;
         GameWindowViewModel brickbreakermodel;
         MenuWindowViewModel menuwindowmodel;
+        List<Brush> colors = new List<Brush> { Brushes.Blue, Brushes.Yellow, Brushes.Red };
         int room_index;
         Thread thread;
-        List<Brush> colors = new List<Brush> { Brushes.Blue, Brushes.Yellow, Brushes.Red };
 
         public ClientNet(MenuWindowViewModel mw)
         {
@@ -113,10 +114,11 @@ namespace BrickBreaker
             }
         }
 
-        public void SendMessage(string message)
+        public void SendMessage(string nickname, string message)
         {
             var bw = new BinaryWriter(tcp.GetStream());
             bw.Write((byte)Commands.SendMessage);
+            bw.Write(nickname);
             bw.Write(message);
         }
 
@@ -157,10 +159,7 @@ namespace BrickBreaker
                             });
                             break;
                         case Commands.SendMessage:
-                            //brickbreaker.Dispatcher.Invoke(() =>
-                            //{
-                            //    mainw.chat.ReceiveMessage(br.ReadString());
-                            //});
+                            ReceiveMessage();
                             break;
                         case Commands.Paint:
                             brickbreaker.Dispatcher.Invoke(() =>
@@ -188,6 +187,21 @@ namespace BrickBreaker
                 }
             }
             catch { }
+        }
+
+        private void ReceiveMessage()
+        {
+            BinaryReader br = new BinaryReader(tcp.GetStream());
+            brickbreaker.Dispatcher.Invoke(() =>
+            {
+                var message = new Message();
+                (message.DataContext as MessageViewModel).SetMessage(0, br.ReadString(), br.ReadString());
+                menuwindowmodel.ChatContent.Add(message);
+                if (menuwindowmodel.ChatContent.Count > 30)
+                    menuwindowmodel.ChatContent.RemoveAt(0);
+
+                menuwindowmodel.Scroll(message);
+            });
         }
 
         private void RemoveBrick()

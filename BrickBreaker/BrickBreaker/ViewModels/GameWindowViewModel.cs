@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace BrickBreaker
+namespace BrickBreaker.ViewModels
 {
     public class GameWindowViewModel : ViewModelBase
     {

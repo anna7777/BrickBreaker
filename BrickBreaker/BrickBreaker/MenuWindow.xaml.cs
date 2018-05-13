@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BrickBreaker.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,17 +26,19 @@ namespace BrickBreaker
             InitializeComponent();
             CreateRooms();
         }
-
+        /// <summary>
+        /// create 50 rooms in menuwindow
+        /// </summary>
         private void CreateRooms()
         {
-            int n = 12;
+            int n = 75;
             MenuWindowViewModel viewmodel = this.DataContext as MenuWindowViewModel;
             for (int i = 0; i < n; i++)
             {
                 #region --- create room --- 
                 Button tmp = new Button();
-                Grid.SetColumn(tmp, (i % 2) + 1);
-                Grid.SetRow(tmp, i / 2);
+                Grid.SetColumn(tmp, i % 5);
+                Grid.SetRow(tmp, i / 5);
                 tmp.Margin = new Thickness(5);
                 tmp.Command = viewmodel.SelectRoomCommand;
                 tmp.CommandParameter = tmp;
@@ -44,8 +47,8 @@ namespace BrickBreaker
 
                 #region  --- exit --- 
                 Button tmpchild = new Button();
-                tmpchild.MinWidth = 50;
-                tmpchild.MinHeight = 20;
+                tmpchild.MinWidth = 40;
+                tmpchild.MinHeight = 15;
                 tmpchild.Content = "Exit";
                 tmpchild.Visibility = Visibility.Hidden;
                 tmpchild.Command = viewmodel.ExitCommand;

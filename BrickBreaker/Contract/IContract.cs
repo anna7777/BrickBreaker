@@ -18,7 +18,7 @@ namespace Contract
         void LoadBricks();
         void CloseGame();
         void Exit();
-        void SendMessage(string message);
+        void SendMessage(string nickname, string message);
     }
 
     public enum Commands

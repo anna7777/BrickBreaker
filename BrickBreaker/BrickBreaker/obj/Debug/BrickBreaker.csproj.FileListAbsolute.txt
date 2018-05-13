@@ -58,3 +58,5 @@ C:\Users\Anna\Desktop\CoolGame\BrickBreaker\BrickBreaker\obj\Debug\MenuWindow.ba
 C:\Users\Anna\Desktop\CoolGame\BrickBreaker\BrickBreaker\obj\Debug\BrickBreaker.g.resources
 C:\Users\Anna\Desktop\CoolGame\BrickBreaker\BrickBreaker\obj\Debug\BrickBreaker.Properties.Resources.resources
 C:\Users\Anna\Desktop\CoolGame\BrickBreaker\BrickBreaker\obj\Debug\BrickBreaker.csproj.GenerateResource.Cache
+C:\Users\Anna\Desktop\CoolGame\BrickBreaker\BrickBreaker\obj\Debug\Message.g.cs
+C:\Users\Anna\Desktop\CoolGame\BrickBreaker\BrickBreaker\obj\Debug\Message.baml
