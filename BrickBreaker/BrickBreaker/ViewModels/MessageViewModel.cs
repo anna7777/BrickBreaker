@@ -6,19 +6,33 @@ using System.Threading.Tasks;
 
 namespace BrickBreaker.ViewModels
 {
-
+    /// <summary>
+    /// class that implements the viewmodel of a message
+    /// </summary>
     class MessageViewModel : ViewModelBase
     {
-        //private string width;
-        //public string Width
-        //{
-        //    get { return width; }
-        //    set
-        //    {
-        //        width = value;
-        //        OnPropertyChanged(nameof(Width));
-        //    }
-        //}
+        #region binding properties
+        private int nick_width;
+        public int NickWidth
+        {
+            get { return nick_width; }
+            set
+            {
+                nick_width = value;
+                OnPropertyChanged(nameof(NickWidth));
+            }
+        }
+
+        private int width;
+        public int Width
+        {
+            get { return width; }
+            set
+            {
+                width = value;
+                OnPropertyChanged(nameof(Width));
+            }
+        }
 
         private string nickname;
         public string Nickname
@@ -41,10 +55,11 @@ namespace BrickBreaker.ViewModels
                 OnPropertyChanged(nameof(Message));
             }
         }
+        #endregion
 
         public void SetMessage(int actualwidth, string nickname, string message)
         {
-            //Width = actualwidth;
+            //Width = actualwidth - NickWidth;
             Nickname = nickname;
             Message = message;
         }

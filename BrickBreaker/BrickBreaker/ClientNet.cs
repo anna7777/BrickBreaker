@@ -17,17 +17,22 @@ using BrickBreaker.Experts;
 
 namespace BrickBreaker
 {
+    /// <summary>
+    /// class that sends requests to the server and, receiving a response, processes it
+    /// </summary>
     public class ClientNet : IContract
     {
-        TcpClient tcp;
-        GameWindow brickbreaker;
-        GameWindowViewModel brickbreakermodel;
-        MenuWindowViewModel menuwindowmodel;
+        #region variables
         List<Brush> colors = new List<Brush> { Brushes.Blue, Brushes.Yellow, Brushes.Red };
+        MenuWindowViewModel menuwindowmodel;
+        GameWindowViewModel brickbreakermodel;
+        GameWindow brickbreaker;
         Image esc = new Image();
-        int room_index;
-        Thread thread;
         bool pause = false;
+        int room_index;
+        TcpClient tcp;
+        Thread thread;
+        #endregion
 
         public ClientNet(MenuWindowViewModel mw)
         {
@@ -47,6 +52,9 @@ namespace BrickBreaker
             esc.Height = 518;
         }
 
+        /// <summary>
+        /// connect to server
+        /// </summary>
         public void Connect()
         {
             tcp.Connect(new IPEndPoint(new IPAddress(new byte[] { 127, 0, 0, 1 }), 11000));
@@ -57,6 +65,10 @@ namespace BrickBreaker
             bw.Write((byte)Commands.Connect);
         }
 
+        /// <summary>
+        /// select a room with the specified index
+        /// </summary>
+        /// <param name="index">room index in list of rooms</param>
         public void SelectARoom(int index)
         {
             room_index = index;
@@ -65,6 +77,9 @@ namespace BrickBreaker
             bw.Write((byte)index);
         }
 
+        /// <summary>
+        /// player move left
+        /// </summary>
         public void MoveLeft()
         {
             if (pause)
@@ -73,6 +88,9 @@ namespace BrickBreaker
             bw.Write((byte)Commands.Left);
         }
 
+        /// <summary>
+        /// player move right
+        /// </summary>
         public void MoveRight()
         {
             if (pause)
@@ -82,19 +100,28 @@ namespace BrickBreaker
             bw.Write(DesignExpert.fieldWidth);
         }
 
+        /// <summary>
+        /// send the command to the server, which opens the game window for both players
+        /// </summary>
         public void LoadGame()
         {
             var bw = new BinaryWriter(tcp.GetStream());
             bw.Write((byte)Commands.LoadGame);
             bw.Write(DesignExpert.fieldWidth);
         }
-
+        /// <summary>
+        /// send the command to the server, which will generate a map 
+        /// and return the coordinates of the bricks on it, which it read from the database
+        /// </summary>
         public void LoadBricks()
         {
             var bw = new BinaryWriter(tcp.GetStream());
             bw.Write((byte)Commands.LoadBricks);
         }
 
+        /// <summary>
+        /// send the command to the server, which will close the game
+        /// </summary>
         public void CloseGame()
         {
             brickbreaker.Dispatcher.Invoke(() =>
@@ -105,6 +132,10 @@ namespace BrickBreaker
             bw.Write((byte)Commands.CloseGame);
         }
 
+        /// <summary>
+        /// send the command to the server, which will process ball coordinates 
+        /// and return new ball coordinates 
+        /// </summary>
         public void BallCoordinatesProcesing()
         {
             var bw = new BinaryWriter(tcp.GetStream());
@@ -115,6 +146,9 @@ namespace BrickBreaker
             bw.Write(DesignExpert.playerHeight);
         }
 
+        /// <summary>
+        /// send the command to the server, which will close the game
+        /// </summary>
         public void Exit()
         {
             if (brickbreaker.IsLoaded)
@@ -131,6 +165,11 @@ namespace BrickBreaker
             }
         }
 
+        /// <summary>
+        /// send the command to the server, which will send message to all players
+        /// </summary>
+        /// <param name="nickname">your nickname</param>
+        /// <param name="message">your message</param>
         public void SendMessage(string nickname, string message)
         {
             var bw = new BinaryWriter(tcp.GetStream());
@@ -159,6 +198,9 @@ namespace BrickBreaker
             bw.Write((byte)Commands.Pause);
         }
 
+        /// <summary>
+        /// method, which always listens for commands coming from the server
+        /// </summary>
         private void ClientListener()
         {
             try
@@ -276,13 +318,16 @@ namespace BrickBreaker
             });
         }
 
+        /// <summary>
+        /// receive message from another player
+        /// </summary>
         private void ReceiveMessage()
         {
             BinaryReader br = new BinaryReader(tcp.GetStream());
             brickbreaker.Dispatcher.Invoke(() =>
             {
                 var message = new Message();
-                (message.DataContext as MessageViewModel).SetMessage(0, br.ReadString(), br.ReadString());
+                (message.DataContext as MessageViewModel).SetMessage(500, br.ReadString(), br.ReadString());
                 menuwindowmodel.ChatContent.Add(message);
                 if (menuwindowmodel.ChatContent.Count > 30)
                     menuwindowmodel.ChatContent.RemoveAt(0);
@@ -291,6 +336,9 @@ namespace BrickBreaker
             });
         }
 
+        /// <summary>
+        /// remove brick, when ball hit it
+        /// </summary>
         private void RemoveBrick()
         {
             BinaryReader br = new BinaryReader(tcp.GetStream());
@@ -308,6 +356,9 @@ namespace BrickBreaker
             });
         }
 
+        /// <summary>
+        /// load all bricks at the beginning of the game
+        /// </summary>
         private void SetBricks()
         {
             BinaryReader br = new BinaryReader(tcp.GetStream());
@@ -335,6 +386,9 @@ namespace BrickBreaker
             }
         }
 
+        /// <summary>
+        /// scores one point to the player who scored the goal
+        /// </summary>
         private void SetGoal()
         {
             BinaryReader br = new BinaryReader(tcp.GetStream());
@@ -357,7 +411,10 @@ namespace BrickBreaker
                 });
             }
         }
-
+        /// <summary>
+        /// confirms the selection of the room by the player
+        /// if there are 2 players in the room, opens the playing field
+        /// </summary>
         private void SelectRoom()
         {
             var br = new BinaryReader(tcp.GetStream());
@@ -380,6 +437,10 @@ namespace BrickBreaker
                 MessageBox.Show("This room is busy.", "System information", MessageBoxButton.OK, MessageBoxImage.Stop);
         }
 
+        /// <summary>
+        /// sets new ball coordinates
+        /// </summary>
+        /// <param name="com"> LoadGame or BallCoordinatesProcessing</param>
         private void SetBallCoordinates(Commands com)
         {
             var br = new BinaryReader(tcp.GetStream());
@@ -416,6 +477,9 @@ namespace BrickBreaker
             }
         }
 
+        /// <summary>
+        /// move player 
+        /// </summary>
         private void Move()
         {
             var br = new BinaryReader(tcp.GetStream());
@@ -432,6 +496,9 @@ namespace BrickBreaker
                 });
         }
 
+        /// <summary>
+        /// disconnect from the server
+        /// </summary>
         public void Disconnect()
         {
             BinaryWriter bw = new BinaryWriter(tcp.GetStream());

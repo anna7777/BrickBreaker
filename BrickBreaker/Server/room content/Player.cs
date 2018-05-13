@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 
 namespace Server
 {
+    /// <summary>
+    /// class, which is a theoretical model of the player
+    /// </summary>
     class Player
     {
+        public TcpClient tcp { get { return _tcp; } set { _tcp = value; } }
         public bool busy { get; set; }
-        private TcpClient _tcp;
         public double left { get; set; }
         public double speed { get; set; }
-        public TcpClient tcp { get { return _tcp; } set { _tcp = value; } }
+        private TcpClient _tcp;
 
         public Player()
         {

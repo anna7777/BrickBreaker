@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace Server
 {
+    /// <summary>
+    /// class, which is a theoretical model of the room
+    /// </summary>
     class Room
     {
+        #region properties
         public Player player1 { get; set; }
         public Player player2 { get; set; }
         public double ball_speed { get; set; }
@@ -19,7 +23,11 @@ namespace Server
         public Goal goal { get; set; }
         public List<Brick> bricks_p1 { get; set; }
         public List<Brick> bricks_p2 { get; set; }
+        #endregion
 
+        /// <summary>
+        /// constructor, which initializes all objects with initial values
+        /// </summary>
         public Room()
         {
             player1 = new Player();
@@ -32,6 +40,9 @@ namespace Server
             k = 0;
         }
 
+        /// <summary>
+        /// change ball direction
+        /// </summary>
         public void ChangeDirection()
         {
             direction *= -1;

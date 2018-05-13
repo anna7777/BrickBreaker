@@ -11,6 +11,9 @@ using System.IO;
 
 namespace Server
 {
+    /// <summary>
+    /// class that implements the receipt of commands from the client and server computing
+    /// </summary>
     class ServerNet
     {
         #region variables
@@ -30,6 +33,9 @@ namespace Server
         BrickBreakerEntities _db = new BrickBreakerEntities();
         #endregion
 
+        /// <summary>
+        /// constructor, which creates 75 theoretical room models
+        /// </summary>
         public ServerNet()
         {
             int n = 75;
@@ -40,6 +46,9 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// method, which always listens for commands coming from clients
+        /// </summary>
         public void ListenerClient(Object ob)
         {
             TcpClient tcp = ob as TcpClient;
@@ -184,6 +193,10 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// connect to the server and paint rooms
+        /// </summary>
+        /// <param name="tcp"></param>
         private void ConnectAndPaint(TcpClient tcp)
         {
             Console.WriteLine("Hello, user!");
@@ -207,6 +220,11 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// disconnect from server
+        /// </summary>
+        /// <param name="tcp"></param>
+        /// <param name="close"></param>
         private void Disconnect(TcpClient tcp, bool close)
         {
             try
@@ -247,6 +265,10 @@ namespace Server
             catch { }
         }
 
+        /// <summary>
+        /// send message from one player to other players
+        /// </summary>
+        /// <param name="tcp"></param>
         private void SendMessage(TcpClient tcp)
         {
             BinaryReader br = new BinaryReader(tcp.GetStream());
@@ -262,6 +284,10 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// close gamewindow and paint this room in a blue color
+        /// </summary>
+        /// <param name="tcp"></param>
         private void Exit(TcpClient tcp)
         {
             try
@@ -286,6 +312,10 @@ namespace Server
             catch { }
         }
 
+        /// <summary>
+        /// close game
+        /// </summary>
+        /// <param name="tcp"></param>
         private void CloseGame(TcpClient tcp)
         {
             try
@@ -318,6 +348,10 @@ namespace Server
             catch { }
         }
 
+        /// <summary>
+        /// process ball coordinates and returns new one
+        /// </summary>
+        /// <param name="tcp"></param>
         private void BallCoordinatesProcesing(TcpClient tcp)
         {
             #region --- read data ---
@@ -427,6 +461,13 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// remove brick, when ball hits it
+        /// </summary>
+        /// <param name="room">room, in which we need to remove the brick</param>
+        /// <param name="brick"> brick, which we need to remove</param>
+        /// <param name="window_height"> height of the gamewindow</param>
+        /// <param name="side">side in which ball hits the ball(player1 side or player2 side)</param>
         public void RemoveBrick(Room room, Brick brick, double window_height, bool side)
         {
             BinaryWriter bw = new BinaryWriter(room.player1.tcp.GetStream());
@@ -441,6 +482,11 @@ namespace Server
             bw.Write(!side);
         }
 
+        /// <summary>
+        /// send a command to score one point to the player who scored the goal
+        /// </summary>
+        /// <param name="room">room, in which player scored th goal</param>
+        /// <param name="g">player</param>
         private void SendGoal(Room room, byte g)
         {
             BinaryWriter bw = new BinaryWriter(room.player1.tcp.GetStream());
@@ -451,6 +497,12 @@ namespace Server
             bw.Write(g);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="room">room, in which we set initial coordinates</param>
+        /// <param name="window_height">height of the gamewindow</param>
+        /// <param name="player_width">players width</param>
         private void SetInitialCoordinates(Room room, double window_height, double player_width)
         {
             room.player1.left = 150;
@@ -470,6 +522,12 @@ namespace Server
             room.k = 0;
         }
 
+        /// <summary>
+        /// send new ball coordinates to players
+        /// </summary>
+        /// <param name="room">room, in which we send new ball coordinates</param>
+        /// <param name="com">command</param>
+        /// <param name="window_width">width of the gamewindow</param>
         private void SendBallCoordinates(Room room, Commands com, double window_width)
         {
             try
@@ -492,6 +550,10 @@ namespace Server
             catch { }
         }
 
+        /// <summary>
+        /// we reflect that the room is occupied by it's theoretical model
+        /// </summary>
+        /// <param name="tcp"></param>
         private void SelectRoom(TcpClient tcp)
         {
             BinaryReader br = new BinaryReader(tcp.GetStream());
@@ -537,7 +599,10 @@ namespace Server
                 }
             }
         }
-
+        /// <summary>
+        /// we reflect that the player move left by it's theoretical model
+        /// </summary>
+        /// <param name="tcp"></param>
         private void MoveLeft(TcpClient tcp)
         {
             Room room = rooms.FirstOrDefault(x => x.player1.tcp == tcp || x.player2.tcp == tcp);
@@ -568,6 +633,10 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// we reflect that the player move right by it's theoretical model
+        /// </summary>
+        /// <param name="tcp"></param>
         private void MoveRight(TcpClient tcp)
         {
             Room room = rooms.FirstOrDefault(x => x.player1.tcp == tcp || x.player2.tcp == tcp);

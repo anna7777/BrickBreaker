@@ -44,16 +44,19 @@
                      Height="22"
                      Margin ="5 10 10 0"
                      FontSize="14"
+                     MaxLength="40"
                      Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <ListBox MinWidth="500" Height="170"
                  Margin="12 5 12 3"
                  Name="lbChat"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                  ItemsSource="{Binding ChatContent}"/>
         <StackPanel Orientation="Horizontal">
             <TextBox Width="409" MinHeight="22"
                      Margin="10 3 5 10"
                      FontSize="14"
+                     MaxLength="90"
                      Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>

@@ -13,6 +13,7 @@ namespace BrickBreaker.Experts
     /// </summary>
     class DesignExpert
     {
+        #region variables
         public static string project_path = Environment.CurrentDirectory.Substring(0, Environment.CurrentDirectory.Length - 9);
         public static List<Brush> colors = new List<Brush>() { Brushes.Red, Brushes.SkyBlue, Brushes.LightGreen, Brushes.Orange };
         public static double fieldWidth = 350;
@@ -23,6 +24,7 @@ namespace BrickBreaker.Experts
         static ImageBrush brick = new ImageBrush() { ImageSource = new BitmapImage(new Uri(project_path + $"pictures/brick.jpg")) };
         static BitmapImage esc = new BitmapImage(new Uri(project_path + $"pictures/esc.png"));
         static Random random = new Random();
+        #endregion
 
         /// <summary>
         /// generate backgroundimage for player by his id

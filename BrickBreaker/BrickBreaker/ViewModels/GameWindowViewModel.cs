@@ -17,22 +17,32 @@ using System.Windows.Threading;
 
 namespace BrickBreaker.ViewModels
 {
+    /// <summary>
+    /// class that implements the viewmodel of a game
+    /// </summary>
     public class GameWindowViewModel : ViewModelBase
     {
+        #region variables
         public IContract con;
         public DispatcherTimer timer;
         public bool closeSecondGame;
         public int p1Points = 0;
         public int p2Points = 0;
+        #endregion
 
+        #region commands
         public ICommand MoveLeftCommand { get; set; }
         public ICommand MoveRightCommand { get; set; }
         public ICommand EscCommand { get; set; }
         public ICommand WindowLoadedCommand { get; set; }
         public ICommand ClosingCommand { get; set; }
+        #endregion
 
+        #region collections
         public ObservableCollection<UIElement> items { get; set; }
+        #endregion
 
+        #region binding properties
         private Brush background1;
         public Brush Background1
         {
@@ -175,7 +185,11 @@ namespace BrickBreaker.ViewModels
                 OnPropertyChanged(nameof(Map));
             }
         }
+        #endregion
 
+        /// <summary>
+        /// constructor, which initializes all objects with initial values
+        /// </summary>
         public GameWindowViewModel()
         {
             MoveLeftCommand = new RelayCommand(MoveLeftCommandExecute);
@@ -200,6 +214,9 @@ namespace BrickBreaker.ViewModels
             CreateBall();
         }
 
+        /// <summary>
+        /// create two players
+        /// </summary>
         public void CreateTwoPlayers()
         {
             Image player1 = new Image();
@@ -216,7 +233,7 @@ namespace BrickBreaker.ViewModels
             #region -- binding left --
             Binding bind_left1 = new Binding();
             BindingSettings(bind_left1);
-            bind_left1.Path = new PropertyPath("Left1");;
+            bind_left1.Path = new PropertyPath("Left1"); ;
             player1.SetBinding(Canvas.LeftProperty, bind_left1);
             #endregion
 
@@ -256,6 +273,10 @@ namespace BrickBreaker.ViewModels
             items.Add(player2);
         }
 
+        /// <summary>
+        /// set binding settings
+        /// </summary>
+        /// <param name="bind"></param>
         public void BindingSettings(Binding bind)
         {
             bind.Source = this;
@@ -263,6 +284,9 @@ namespace BrickBreaker.ViewModels
             bind.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
         }
 
+        /// <summary>
+        /// create a ball
+        /// </summary>
         public void CreateBall()
         {
             Button ball = new Button();
@@ -290,21 +314,37 @@ namespace BrickBreaker.ViewModels
             items.Add(ball);
         }
 
+        /// <summary>
+        /// player move left
+        /// </summary>
+        /// <param name="obj"></param>
         private void MoveLeftCommandExecute(object obj)
         {
             con.MoveLeft();
         }
 
+        /// <summary>
+        /// player move right
+        /// </summary>
+        /// <param name="obj"></param>
         private void MoveRightCommandExecute(object obj)
         {
             con.MoveRight();
         }
 
+        /// <summary>
+        /// pause call
+        /// </summary>
+        /// <param name="obj"></param>
         private void EscCommandExecute(object obj)
         {
             con.Pause();
         }
 
+        /// <summary>
+        /// load bricks and game objects, when the gamewindow was loaded
+        /// </summary>
+        /// <param name="obj"></param>
         private void WindowLoadedCommandExecute(object obj)
         {
             con.LoadBricks();
@@ -312,6 +352,10 @@ namespace BrickBreaker.ViewModels
             timer.Start();
         }
 
+        /// <summary>
+        /// close game
+        /// </summary>
+        /// <param name="obj"></param>
         private void ClosingCommandExecute(object obj)
         {
             timer.Stop();
@@ -319,6 +363,11 @@ namespace BrickBreaker.ViewModels
                 con.CloseGame();
         }
 
+        /// <summary>
+        /// action performed at a predetermined time
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Timer_Tick(object sender, EventArgs e)
         {
             con.BallCoordinatesProcesing();
