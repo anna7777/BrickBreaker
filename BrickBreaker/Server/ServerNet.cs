@@ -32,7 +32,7 @@ namespace Server
 
         public ServerNet()
         {
-            int n = 12;
+            int n = 75;
             if (rooms.Count() < n)
             {
                 for (int i = 0; i < n; i++)
@@ -89,6 +89,9 @@ namespace Server
                     case Commands.PaintPlayer:
                         PaintPlayer(tcp);
                         break;
+                    case Commands.Pause:
+                        Pause(tcp);
+                        break;
                     case Commands.Exit:
                         Exit(tcp);
                         break;
@@ -96,6 +99,19 @@ namespace Server
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// send a command, which pauses both players
+        /// </summary>
+        /// <param name="tcp"></param>
+        private void Pause(TcpClient tcp)
+        {
+            Room room = rooms.FirstOrDefault(x => x.player1.tcp == tcp || x.player2.tcp == tcp);
+            BinaryWriter bw = new BinaryWriter(room.player1.tcp.GetStream());
+            bw.Write((byte)Commands.Pause);
+            bw = new BinaryWriter(room.player2.tcp.GetStream());
+            bw.Write((byte)Commands.Pause);
         }
 
         /// <summary>

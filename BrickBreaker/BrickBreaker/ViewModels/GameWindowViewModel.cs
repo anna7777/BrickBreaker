@@ -302,7 +302,7 @@ namespace BrickBreaker.ViewModels
 
         private void EscCommandExecute(object obj)
         {
-
+            con.Pause();
         }
 
         private void WindowLoadedCommandExecute(object obj)

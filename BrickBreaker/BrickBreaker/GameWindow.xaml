@@ -31,7 +31,7 @@
     </Window.Resources>-->
     <StackPanel Orientation="Horizontal"
                 Background="Black">
-        <ItemsControl ItemsSource="{Binding items}">
+        <ItemsControl Panel.ZIndex="2" ItemsSource="{Binding items}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Height="518"

@@ -24,8 +24,10 @@ namespace BrickBreaker
         GameWindowViewModel brickbreakermodel;
         MenuWindowViewModel menuwindowmodel;
         List<Brush> colors = new List<Brush> { Brushes.Blue, Brushes.Yellow, Brushes.Red };
+        Image esc = new Image();
         int room_index;
         Thread thread;
+        bool pause = false;
 
         public ClientNet(MenuWindowViewModel mw)
         {
@@ -33,6 +35,16 @@ namespace BrickBreaker
             brickbreaker = new GameWindow();
             brickbreakermodel = brickbreaker.DataContext as GameWindowViewModel;
             menuwindowmodel = mw;
+            SetPauseParams();
+        }
+
+        public void SetPauseParams()
+        {
+            esc.Source = DesignExpert.GetPause();
+            Canvas.SetTop(esc, 0);
+            Canvas.SetLeft(esc, 0);
+            esc.Width = 350;
+            esc.Height = 518;
         }
 
         public void Connect()
@@ -55,12 +67,16 @@ namespace BrickBreaker
 
         public void MoveLeft()
         {
+            if (pause)
+                return;
             var bw = new BinaryWriter(tcp.GetStream());
             bw.Write((byte)Commands.Left);
         }
 
         public void MoveRight()
         {
+            if (pause)
+                return;
             var bw = new BinaryWriter(tcp.GetStream());
             bw.Write((byte)Commands.Right);
             bw.Write(DesignExpert.fieldWidth);
@@ -134,6 +150,15 @@ namespace BrickBreaker
             bw.Write(color_id);
         }
 
+        /// <summary>
+        /// pauses both players
+        /// </summary>
+        public void Pause()
+        {
+            var bw = new BinaryWriter(tcp.GetStream());
+            bw.Write((byte)Commands.Pause);
+        }
+
         private void ClientListener()
         {
             try
@@ -188,6 +213,9 @@ namespace BrickBreaker
                         case Commands.PaintPlayer:
                             SetPlayerColor();
                             break;
+                        case Commands.Pause:
+                            SetPause();
+                            break;
                         case Commands.Disconnect:
                             brickbreaker.Dispatcher.Invoke(() =>
                               {
@@ -202,6 +230,29 @@ namespace BrickBreaker
                 }
             }
             catch { }
+        }
+
+        /// <summary>
+        /// execute a command, which pauses player
+        /// </summary>
+        private void SetPause()
+        {
+            if (!pause)
+            {
+                brickbreaker.Dispatcher.Invoke(() =>
+                {
+                    brickbreakermodel.items.Add(esc);
+                    brickbreakermodel.timer.Stop();
+                });
+                pause = true;
+                return;
+            }
+            brickbreaker.Dispatcher.Invoke(() =>
+            {
+                brickbreakermodel.items.Remove(esc);
+                brickbreakermodel.timer.Start();
+            });
+            pause = false;
         }
 
         /// <summary>
@@ -344,7 +395,7 @@ namespace BrickBreaker
                         int number = 1;
                         brickbreakermodel.Source1 = DesignExpert.GetPlayerBackground(ref number);
                         brickbreakermodel.Background1 = DesignExpert.colors[number - 1];
-                        PaintPlayer(number);   
+                        PaintPlayer(number);
                     }
                 });
             }

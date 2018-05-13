@@ -20,12 +20,14 @@ namespace Contract
         void Exit();
         void SendMessage(string nickname, string message);
         void PaintPlayer(int color_id);
+        void Pause();
     }
 
     public enum Commands
     {
         Connect,
         Disconnect,
+        Pause,
         SelectARoom,
         Left,
         Right,
